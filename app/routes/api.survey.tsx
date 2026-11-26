@@ -27,7 +27,9 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
  */
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { sessionToken, cors } = await authenticate.public.checkout(request);
-  const shop = new URL(sessionToken.dest).hostname || sessionToken.dest;
+  // Checkout session tokens carry the shop as a bare domain
+  // ("store.myshopify.com"); admin tokens use a full URL. Handle both.
+  const shop = sessionToken.dest.replace(/^https?:\/\//, "").replace(/\/.*$/, "");
 
   const body = (await request.json().catch(() => null)) as {
     answer?: string;

@@ -224,3 +224,61 @@ With a $600 snowboard, COD is gone and the section changes to "Pay with credit c
 **Worth knowing:** the validation also runs when items are added to the cart, not only at checkout. A cart link for 6 units was refused before a cart was even created. That's good for protecting stock, but the buyer gets no message on that path. On the cart page the buyer does get the message, as shown above.
 
 Phase 3 is complete.
+
+---
+
+## Phase 4: Gift wrap upsell, thank-you survey, admin gift details (26 Nov 2026)
+
+Three extensions in three different places: checkout, the thank-you page and the Shopify admin.
+
+### Gift wrap upsell (checkout UI extension)
+A card under the cart lines (`purchase.checkout.cart-line-list.render-after`) offering gift wrap for $5. **Add** puts the gift wrap line in the order with `applyCartLinesChange`; the card then shows "✓ Gift wrap added" with a **Remove** button.
+
+- The gift wrap product was created and published to the Online Store through the Admin API (`productCreate`, `productVariantsBulkUpdate`, `publishablePublish`): $5, untracked stock, tagged `giftwell-exclude`.
+- Which product to add is a checkout editor setting (`variant_reference`), so a merchant can pick their own. Without it, the extension looks up the `giftwell-gift-wrap` product through the Storefront API.
+- **The tag pays off:** with 2 ski wax and 1 gift wrap in the cart, the discount stays at "Buy 2+, save 10%". The gift wrap isn't counted towards the tier, exactly as the phase 2 Function intended.
+
+![Gift wrap offer under the cart lines](screenshots/16-gift-wrap-offer.jpg)
+
+![Gift wrap added: new $5 line, discount still on the wax only](screenshots/17-gift-wrap-added.jpg)
+
+### Thank-you survey (checkout UI extension + app API + database)
+"How did you hear about us?" on the thank-you page (`purchase.thank-you.block.render`). The thank-you page can't write to the order, so answers go to the app's own backend:
+
+1. The extension gets a session token from Shopify (`sessionToken.get()`) and POSTs the answer and the order ID to `/api/survey`.
+2. The route verifies the token with `authenticate.public.checkout`, which also handles CORS. The shop is taken from the verified token, never from the request body.
+3. The answer is checked against the allowed list and saved with Prisma, one answer per order (an upsert on shop + order ID).
+4. The extension remembers per order that it was answered, so a reload doesn't ask again.
+
+Needs **network access** for the extension, enabled in the Dev Dashboard (Settings → Access requests).
+
+![Survey on the thank-you page, in the store's branding](screenshots/20-thank-you-survey.png)
+
+Saved in the database after sending:
+
+| shop | orderId | answer |
+|---|---|---|
+| giftwell-dev.myshopify.com | gid://shopify/OrderIdentity/19046797017380 | instagram |
+
+### Gift details on the admin order page (admin UI extension)
+Added after the phase 2 test order showed the gift message was three clicks deep. A block on the order page (`admin.order-details.block.render`) reads the order's gift message metafield and line items through the Admin API and shows a "Gift order" badge, a "Gift wrap × N" badge and the message.
+
+Reading orders needs **protected customer data** access. Giftwell asks for level 1 only (customer data, without names, emails, phone numbers or addresses), requested in the Dev Dashboard. Before that, the block correctly showed its error state.
+
+![Gift details block on order #1001](screenshots/18-admin-gift-details-block.png)
+
+On order #1003, with gift wrap, both badges show (this test order's message is placeholder text):
+
+![Gift details with gift wrap badge on order #1003](screenshots/21-admin-block-gift-wrap.jpg)
+
+### Problems and fixes
+| Problem | Fix |
+|---|---|
+| A shell variable named `UID` broke a script and left a placeholder extension ID | `UID` is read-only in zsh. Generated a new random extension ID in the same format. |
+| `formatCurrency` rejected `currencyCode` | The option is `currency` (standard `Intl.NumberFormat` naming). |
+| The admin block's type check failed with dozens of errors | They were all in the generated `dist/` bundle; excluded `dist` in its `tsconfig.json`. |
+| Survey: "We couldn't send your answer" (1) | The server crashed on `new URL(sessionToken.dest)`. In checkout session tokens `dest` is a bare shop domain, not a URL. Now handled both ways. |
+| Survey: still failing (2) | The running server held the database client from before the survey table existed. Restarting the dev server loaded the new client. |
+| Admin block showed "Couldn't load the gift details" | Expected until protected customer data access was granted in the Dev Dashboard. |
+
+Phase 4 is complete.
