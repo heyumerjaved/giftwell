@@ -171,3 +171,56 @@ The gift message typed in checkout was copied from the cart metafield onto the o
 - Because the field is app-owned and read-only for the merchant, it's tucked away under Metafields → View all → View read only metafields. That's three clicks for something a packer needs at a glance. Next improvement: an admin order block extension that shows the gift message right on the order page.
 
 Phase 2 is complete.
+
+### Reload question, resolved
+Re-tested at the start of phase 3 on one checkout: tick the box, type a message, reload the same checkout. The message, the ticked box and "Gift message saved" all come back. The earlier empty cards came from opening a fresh cart link each time, which starts a new cart with no metafields. It was not a bug in the extension.
+
+---
+
+## Phase 3: Hide cash on delivery + max per product (26 Nov 2026)
+
+Two more Shopify Functions, both scaffolded with Shopify CLI in JavaScript and configured through a JSON metafield (`$app.function-configuration`) on their owner, like the discount.
+
+### Hide cash on delivery (Payment Customization API)
+If the order total is above `maxOrderTotal` (default $200), the Function returns a `paymentMethodHide` operation for every payment method whose name contains one of `paymentMethodNames` (default "cash on delivery" and "cod").
+
+The name match is whole-word and case-insensitive, so "COD" and "Cash on Delivery (COD)" match but a method like "Barcode Pay", which contains the letters "cod", is never hidden. One of the 5 fixture tests checks exactly that.
+
+| Test cart | Expected |
+|---|---|
+| $150 | COD stays |
+| $250 | only COD is hidden |
+| exactly $200 | COD stays (the rule is "above") |
+| custom limit $100 and custom method name | the named method is hidden |
+| $500, store has no COD method | nothing to hide |
+
+### Max per product (Cart and Checkout Validation API)
+Adds up the units of each product across all its variants (3 red + 3 blue of one shirt is 6) and blocks checkout when any product is above `maxPerProduct` (default 5), with a message that names the product.
+
+| Test cart | Expected |
+|---|---|
+| 5 of one product | allowed |
+| 6 of one product | blocked |
+| 3 + 3 of two variants of one product | blocked (6 in total) |
+| custom limit of 2, 3 in the cart | blocked |
+| a custom line item with no product | ignored |
+
+### Activating them
+Both were created through the Admin API with `paymentCustomizationCreate` and `validationCreate` (with `blockOnFailure: true`), each carrying its configuration metafield. New scopes: `write_payment_customizations` and `write_validations`.
+
+### Seen working on the dev store
+Max per product, on the cart page: trying to go from 5 to 6 is refused, with the Function's message shown under the quantity. The cart also shows the tiered discount ("Buy 3+, save 15%"), so that Function runs on the cart page as well as in checkout.
+
+![Cart refusing a 6th unit with the max-per-product message](screenshots/13-cart-max-per-product.jpg)
+
+Hide cash on delivery: with a $52.92 total, "Cash on Delivery (COD)" is offered under the card form.
+
+![COD offered on a $52.92 order](screenshots/14-cod-shown-under-200.jpg)
+
+With a $600 snowboard, COD is gone and the section changes to "Pay with credit card", because only one method is left.
+
+![COD hidden on a $600 order](screenshots/15-cod-hidden-over-200.jpg)
+
+**Worth knowing:** the validation also runs when items are added to the cart, not only at checkout. A cart link for 6 units was refused before a cart was even created. That's good for protecting stock, but the buyer gets no message on that path. On the cart page the buyer does get the message, as shown above.
+
+Phase 3 is complete.
