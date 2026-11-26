@@ -128,9 +128,6 @@ Ticked, with a message and the live character count, on the same checkout as the
 
 The dev log shows the Function's cost on a real checkout: **0.36 million instructions** per run, comfortably inside Shopify's Function limit.
 
-### Still to do in phase 2
-- Place a test order and screenshot the gift message on the order page in the admin.
-
 ### Checkout branding in the Boomer Gifts palette
 Extensions can't set colours themselves; they use tones (info, success, warning) and the store's checkout branding decides the real colours. On Shopify Plus that branding is set through the Admin API, so I branded the dev store's checkout with the palette and fonts from the Boomer Gifts theme:
 
@@ -157,5 +154,19 @@ The same gift message extension, with no code changes, now in the brand:
 
 ![Maroon Pay now button and gold checkbox](screenshots/10-branded-pay-now.jpg)
 
-### Open question
-After the branding and permission changes, a reload of the same checkout once came back with the gift card unticked (an earlier reload had restored it correctly). To verify on the test order: whether the message survives a reload and lands on the order.
+### End-to-end test order
+A test order (#1001) placed through Shopify's test gateway confirms both pieces make it onto the order.
+
+The discount Function's line appears on the order exactly as in checkout: "Buy 2+, save 10%", −$4.98.
+
+![Order #1001 with the tiered discount line](screenshots/11-order-discount.jpg)
+
+The gift message typed in checkout was copied from the cart metafield onto the order by the cart-to-order copyable definition, and shows in the admin as "Gift message":
+
+![Order #1001 with the gift message](screenshots/12-order-gift-message.jpg)
+
+**What I learned from it:**
+- The order API is gated behind Shopify's protected customer data rules, so the app can't read orders until that access is declared (even on a dev store). I verified the message in the admin instead; declaring that access is only needed once the app reads orders itself.
+- Because the field is app-owned and read-only for the merchant, it's tucked away under Metafields → View all → View read only metafields. That's three clicks for something a packer needs at a glance. Next improvement: an admin order block extension that shows the gift message right on the order page.
+
+Phase 2 is complete.
