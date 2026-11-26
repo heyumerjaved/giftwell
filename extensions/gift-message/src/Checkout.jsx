@@ -62,31 +62,51 @@ function GiftMessage() {
     }
   }
 
+  const charactersLeft = MAX_LENGTH - message.length;
+
   return (
-    <s-stack gap="base">
-      <s-checkbox
-        label={i18n.translate("isGift")}
-        checked={isGift}
-        onChange={onToggle}
-      />
-      {isGift && (
-        <s-stack gap="small-200">
-          <s-text-area
-            label={i18n.translate("messageLabel")}
-            value={message}
-            maxLength={MAX_LENGTH}
-            rows={3}
-            error={error}
-            onInput={(event) => setMessage(valueOf(event))}
-            onChange={(event) => save(valueOf(event))}
-          />
-          <s-text>
-            {i18n.translate("charactersLeft", {
-              count: MAX_LENGTH - message.length,
-            })}
-          </s-text>
+    <s-box
+      border="base"
+      borderRadius="large"
+      padding="base"
+      background={isGift ? "subdued" : "base"}
+    >
+      <s-stack gap="base">
+        <s-stack direction="inline" gap="base" alignItems="center">
+          <s-icon type="gift-card" size="large" />
+          <s-stack gap="none">
+            <s-text type="strong">{i18n.translate("heading")}</s-text>
+            <s-text color="subdued">{i18n.translate("subheading")}</s-text>
+          </s-stack>
         </s-stack>
-      )}
-    </s-stack>
+
+        <s-checkbox
+          label={i18n.translate("isGift")}
+          checked={isGift}
+          onChange={onToggle}
+        />
+
+        {isGift && (
+          <s-stack gap="small-200">
+            <s-text-area
+              label={i18n.translate("messageLabel")}
+              value={message}
+              maxLength={MAX_LENGTH}
+              rows={3}
+              error={error}
+              onInput={(event) => setMessage(valueOf(event))}
+              onChange={(event) => save(valueOf(event))}
+            />
+            <s-text
+              type="small"
+              color="subdued"
+              tone={charactersLeft <= 20 ? "warning" : "auto"}
+            >
+              {i18n.translate("charactersLeft", { count: charactersLeft })}
+            </s-text>
+          </s-stack>
+        )}
+      </s-stack>
+    </s-box>
   );
 }

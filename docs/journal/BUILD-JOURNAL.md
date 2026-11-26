@@ -83,7 +83,9 @@ Tested with 5 fixture carts run against the compiled WebAssembly through Shopify
 | discount without the product class | no discount |
 
 ### Gift message (Checkout UI extension)
-A checkbox, "This order is a gift". Ticking it shows a message box limited to 250 characters, with a live count of the characters left. Placed right after the delivery address. Labels are translated (English and French).
+A card right after the delivery address: a gift icon, "Sending this as a gift?" and a short subtitle, then a "Yes, this order is a gift" checkbox. Ticking it turns the card a soft grey and opens a message box limited to 250 characters, with a live count that turns amber when 20 characters are left.
+
+Checkout extensions can't use custom CSS: Shopify keeps checkout consistent with each store's branding. So the styling is done entirely with Polaris components (`s-box` border, radius and background, `s-icon`, `s-text` types and tones). The first version was a plain checkbox; I restyled it into the card after a review. Labels are translated (English and French).
 
 **Where the message is stored:** Shopify now marks cart attributes (`applyAttributeChange`) as deprecated and recommends cart metafields. So the extension writes the cart metafield `$app.gift_message`, and an order metafield definition in `shopify.app.toml` with `cart_to_order_copyable = true` copies it onto the order when it is placed. The merchant sees it on the order page as "Gift message".
 
@@ -115,7 +117,11 @@ The discount was activated through the app's Admin API connection (the same `dis
 
 ![Checkout with the 15% tier applied](screenshots/06-checkout-tier-15-percent.png)
 
-The gift message after the delivery address, with the live character count, on the same checkout as the discount:
+The gift card closed, as most buyers first see it:
+
+![Gift message card before ticking](screenshots/07-gift-card-closed.jpg)
+
+Ticked, with a message and the live character count, on the same checkout as the discount:
 
 ![Gift message box and tiered discount in checkout](screenshots/05-checkout-gift-message-and-discount.jpg)
 

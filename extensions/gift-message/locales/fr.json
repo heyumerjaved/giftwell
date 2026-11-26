@@ -1,7 +1,9 @@
 {
   "name": "Message cadeau Giftwell",
-  "isGift": "Cette commande est un cadeau",
-  "messageLabel": "Message cadeau (imprimé sur le bon de livraison)",
+  "heading": "C'est pour offrir ?",
+  "subheading": "Ajoutez un mot personnel, nous le joindrons à la commande.",
+  "isGift": "Oui, cette commande est un cadeau",
+  "messageLabel": "Votre message cadeau",
   "charactersLeft": "{{count}} caractères restants",
   "saveError": "Impossible d'enregistrer votre message. Veuillez réessayer."
 }

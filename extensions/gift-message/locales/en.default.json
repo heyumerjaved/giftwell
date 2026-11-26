@@ -1,7 +1,9 @@
 {
   "name": "Giftwell gift message",
-  "isGift": "This order is a gift",
-  "messageLabel": "Gift message (printed on the packing slip)",
+  "heading": "Sending this as a gift?",
+  "subheading": "Add a personal note and we'll include it with the order.",
+  "isGift": "Yes, this order is a gift",
+  "messageLabel": "Your gift message",
   "charactersLeft": "{{count}} characters left",
   "saveError": "We couldn't save your message. Please try again."
 }
