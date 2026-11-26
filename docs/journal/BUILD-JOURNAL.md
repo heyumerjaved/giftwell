@@ -83,7 +83,7 @@ Tested with 5 fixture carts run against the compiled WebAssembly through Shopify
 | discount without the product class | no discount |
 
 ### Gift message (Checkout UI extension)
-A checkbox, "This order is a gift". Ticking it shows a message box limited to 250 characters, with a live count of the characters left. Placed after the delivery address by default, and also available as a block the merchant can move in the checkout editor. Labels are translated (English and French).
+A checkbox, "This order is a gift". Ticking it shows a message box limited to 250 characters, with a live count of the characters left. Placed right after the delivery address. Labels are translated (English and French).
 
 **Where the message is stored:** Shopify now marks cart attributes (`applyAttributeChange`) as deprecated and recommends cart metafields. So the extension writes the cart metafield `$app.gift_message`, and an order metafield definition in `shopify.app.toml` with `cart_to_order_copyable = true` copies it onto the order when it is placed. The merchant sees it on the order page as "Gift message".
 
@@ -99,6 +99,7 @@ Replaced the template's demo page with a Giftwell home: it shows the tiers and w
 | Dev preview refused the Function: "Variable definitions are missing" | Input-query variables must be backed by metafields. The excluded tag is fixed, so it is now written inline in the query. |
 | Cloudflare quick tunnel kept failing on repeated `shopify app dev` runs ("max tries reached") | Switched to `shopify app dev --use-localhost`, which uses a local certificate made with mkcert. |
 | On localhost, the config was rejected: webhook URIs can't be `localhost`, and the order metafield needs `write_orders` | Paused the two template webhooks while developing on localhost (re-added before deploying), and added the `write_orders` scope. |
+| The checkbox appeared twice in the dev preview | I had given the extension two placements: a fixed one after the delivery address and a movable block. Dev preview shows both, and a merchant who placed the block would also get two. Removed the block, keeping the single fixed spot next to the shipping details. |
 | The gift message didn't show on the first checkout I opened | Checkout UI extensions in development only render on a checkout opened with the `?dev=` preview parameter from the Dev Console, and the preview takes a moment to pick up a new extension. |
 
 ### Seen working on the dev store
