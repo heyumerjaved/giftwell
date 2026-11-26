@@ -1,0 +1,4 @@
+{
+  "name": "Giftwell max per product",
+  "description": "Limits how many units of any one product can be in a single order."
+}

@@ -16,6 +16,7 @@ A running log of how Giftwell was built: decisions, steps, problems and screensh
 | 4 | Hide Cash on Delivery over a set amount | Function: Payment Customization | 3 |
 | 5 | Max 5 of any product per order | Function: Cart and Checkout Validation | 3 |
 | 6 | "How did you hear about us?" on the thank-you page | Checkout UI extension | 4 |
+| 6b | Gift message shown on the admin order page (added after the phase 2 test order) | Admin UI extension | 4 |
 | 7 | Admin settings page, stored in metafields and read by the Functions | Embedded app page (Polaris) | 5 |
 
 Phase 6 is the showcase: README, a 60-second video per piece and the case study.
