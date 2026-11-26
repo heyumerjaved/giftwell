@@ -9,7 +9,8 @@ name = "Giftwell"
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
 # write_discounts: create the automatic discount that runs the tiered-discount Function
 # write_orders: required to define the order metafield that stores the gift message
-scopes = "write_discounts,write_orders"
+# write_checkout_branding_settings: demo setup only, brands the dev store checkout (docs/checkout-branding.graphql)
+scopes = "write_discounts,write_orders,write_checkout_branding_settings"
 
 # Gift message: the checkout extension writes the cart metafield $app.gift_message,
 # and this definition copies it onto the order and shows it to the merchant.

@@ -130,3 +130,32 @@ The dev log shows the Function's cost on a real checkout: **0.36 million instruc
 
 ### Still to do in phase 2
 - Place a test order and screenshot the gift message on the order page in the admin.
+
+### Checkout branding in the Boomer Gifts palette
+Extensions can't set colours themselves; they use tones (info, success, warning) and the store's checkout branding decides the real colours. On Shopify Plus that branding is set through the Admin API, so I branded the dev store's checkout with the palette and fonts from the Boomer Gifts theme:
+
+| Checkout role | Colour |
+|---|---|
+| Brand (Pay now and other buttons) | Maroon `#7B1C2A` |
+| Accent (links, focus, checkboxes) | Gold `#D4920A` |
+| Info tone (gift icon before ticking) | Gold `#D4920A` |
+| Success tone (icon once ticked, "Gift message saved") | Maroon `#7B1C2A` |
+| Order summary panel | Cream `#FBF8F2` |
+| Fonts | Fraunces for headings, Inter for body text |
+
+The mutation is saved in [`docs/checkout-branding.graphql`](../checkout-branding.graphql) so it can be re-run on any Plus or dev store. It needed the `write_checkout_branding_settings` scope.
+
+Two details worth knowing:
+- Setting a secondary font is not enough: checkout headings use the primary font unless `headingLevel1` to `headingLevel3` are pointed at `SECONDARY`.
+- `checkoutBrandingUpsert` is deprecated in favour of `checkoutAndAccountsConfigurationUpdate`, which uses a numbered colour palette plus role mappings and needs another scope. The older mutation still works on API 2026-10 and gives the same result, so this one-off setup script uses it; moving it to the new API is a follow-up.
+
+The same gift message extension, with no code changes, now in the brand:
+
+![Gift card in the Boomer Gifts branding](screenshots/08-branded-gift-card.jpg)
+
+![Branded checkout: Fraunces headings, gold accents, cream order summary](screenshots/09-branded-checkout-top.jpg)
+
+![Maroon Pay now button and gold checkbox](screenshots/10-branded-pay-now.jpg)
+
+### Open question
+After the branding and permission changes, a reload of the same checkout once came back with the gift card unticked (an earlier reload had restored it correctly). To verify on the test order: whether the message survives a reload and lands on the order.

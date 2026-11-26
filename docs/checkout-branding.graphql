@@ -1,0 +1,57 @@
+# Brands the Giftwell Dev checkout in the Boomer Gifts palette (Shopify Plus / dev stores only).
+# Run in the app's GraphiQL (`shopify app dev`, press g) with:
+#   { "checkoutProfileId": "<published checkout profile ID>" }
+# Needs the write_checkout_branding_settings scope.
+#
+# Palette: maroon #7B1C2A, gold #D4920A, cream #FBF8F2, text #2C2C2C.
+# Fonts: Fraunces for headings, Inter for body text.
+mutation BrandGiftwellCheckout($checkoutProfileId: ID!) {
+  checkoutBrandingUpsert(
+    checkoutProfileId: $checkoutProfileId
+    checkoutBrandingInput: {
+      designSystem: {
+        colors: {
+          global: {
+            brand: "#7B1C2A"
+            accent: "#D4920A"
+            info: "#D4920A"
+            success: "#7B1C2A"
+            decorative: "#D4920A"
+          }
+          schemes: {
+            scheme1: { base: { background: "#FFFFFF", text: "#2C2C2C" } }
+            scheme2: { base: { background: "#FBF8F2", text: "#2C2C2C" } }
+          }
+        }
+        typography: {
+          primary: { shopifyFontGroup: { name: "Inter" } }
+          secondary: { shopifyFontGroup: { name: "Fraunces" } }
+        }
+      }
+      customizations: {
+        main: { colorScheme: COLOR_SCHEME1 }
+        orderSummary: { colorScheme: COLOR_SCHEME2 }
+        headingLevel1: { typography: { font: SECONDARY } }
+        headingLevel2: { typography: { font: SECONDARY } }
+        headingLevel3: { typography: { font: SECONDARY } }
+      }
+    }
+  ) {
+    checkoutBranding {
+      designSystem {
+        colors {
+          global {
+            brand
+            accent
+            info
+            success
+          }
+        }
+      }
+    }
+    userErrors {
+      field
+      message
+    }
+  }
+}
