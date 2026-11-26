@@ -1,0 +1,23 @@
+# Giftwell gift message: lets the buyer mark the order as a gift and add a message.
+# The message is saved as the cart metafield $app.gift_message and copied to the
+# order by the matching order metafield definition in shopify.app.toml.
+api_version = "2026-10"
+
+[[extensions]]
+name = "t:name"
+handle = "gift-message"
+type = "ui_extension"
+uid = "9b0b5f20-aee3-259f-4173-a6bdded8fdfb6c4f55d2"
+
+# Default placement: right after the delivery address.
+[[extensions.targeting]]
+module = "./src/Checkout.jsx"
+target = "purchase.checkout.delivery-address.render-after"
+
+# Also available as a block the merchant can place anywhere in the checkout editor.
+[[extensions.targeting]]
+module = "./src/Checkout.jsx"
+target = "purchase.checkout.block.render"
+
+[extensions.capabilities]
+api_access = false

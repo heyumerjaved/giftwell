@@ -1,0 +1,7 @@
+{
+  "name": "Message cadeau Giftwell",
+  "isGift": "Cette commande est un cadeau",
+  "messageLabel": "Message cadeau (imprimé sur le bon de livraison)",
+  "charactersLeft": "{{count}} caractères restants",
+  "saveError": "Impossible d'enregistrer votre message. Veuillez réessayer."
+}

@@ -59,3 +59,46 @@ What the template gives: an embedded admin app (React Router + Polaris), OAuth a
 
 ### Notes for later
 - The template ships demo config (an example metaobject, a product metafield, a product price-change event and broad product scopes). It will be replaced with Giftwell's real scopes in phase 2: discounts, payment customizations and validations.
+
+---
+
+## Phase 2: Gift message + tiered discount (26 Nov 2026, in progress)
+
+### Tiered discount (Shopify Function, Discount API)
+Scaffolded with Shopify CLI (`shopify app generate extension --template discount --flavor vanilla-js`), then trimmed to the one target it needs: `cart.lines.discounts.generate.run`. The scaffold also adds a shipping-discount target, which I removed.
+
+How it works:
+1. The input query asks for each cart line's quantity, whether the product is tagged `giftwell-exclude` (via `hasAnyTag`), and the discount's configuration metafield (`$app.function-configuration`).
+2. The Function adds up the units of every eligible product, picks the highest tier reached, and returns a `productDiscountsAdd` operation for every eligible line.
+3. Tiers come from the metafield, e.g. `{"tiers":[{"minQuantity":2,"percentage":10},{"minQuantity":3,"percentage":15}]}`. If the metafield is missing it falls back to 10% and 15%. That is what lets the phase 5 settings page change the tiers without redeploying code.
+
+Tested with 5 fixture carts run against the compiled WebAssembly through Shopify's function runner. Each test also checks the input against Shopify's schema:
+
+| Test cart | Expected |
+|---|---|
+| 1 item | no discount |
+| 2 units | 10% off |
+| 3 units, one product excluded | 15% off the 2 eligible lines only |
+| 4 units, custom tiers in the metafield | 25% off (custom tier) |
+| discount without the product class | no discount |
+
+### Gift message (Checkout UI extension)
+A checkbox, "This order is a gift". Ticking it shows a message box limited to 250 characters, with a live count of the characters left. Placed after the delivery address by default, and also available as a block the merchant can move in the checkout editor. Labels are translated (English and French).
+
+**Where the message is stored:** Shopify now marks cart attributes (`applyAttributeChange`) as deprecated and recommends cart metafields. So the extension writes the cart metafield `$app.gift_message`, and an order metafield definition in `shopify.app.toml` with `cart_to_order_copyable = true` copies it onto the order when it is placed. The merchant sees it on the order page as "Gift message".
+
+### App home page
+Replaced the template's demo page with a Giftwell home: it shows the tiers and whether the discount is active, with an **Activate tiered discount** button that runs `discountAutomaticAppCreate` with the Function handle and the tiers metafield. Also removed the template's demo scopes, metaobject, product metafield and product webhook; the only scope now is `write_discounts`.
+
+### Problems and fixes
+| Problem | Fix |
+|---|---|
+| `shopify app generate extension` failed calling `pnpm` | The template left a `pnpm-workspace.yaml` in an npm project. npm workspaces were already in `package.json`, so I removed the pnpm file. |
+| `--flavor preact` / `typescript-react` rejected for checkout UI | The checkout template has a single Preact flavor in this CLI version; generating without `--flavor` works. |
+| `applyAttributeChange` is deprecated | Switched to cart metafields plus a cart-to-order copyable order metafield definition. |
+| Dev preview refused the Function: "Variable definitions are missing" | Input-query variables must be backed by metafields. The excluded tag is fixed, so it is now written inline in the query. |
+| Cloudflare quick tunnel kept failing on repeated `shopify app dev` runs | Network-side; the first install run is done from an interactive terminal. |
+
+### Still to do in phase 2
+- Install the app on the dev store (first interactive `shopify app dev`), activate the discount and place a test order with a gift message.
+- Screenshots: the gift message in checkout, the discount line in the order summary, and the message on the order page.

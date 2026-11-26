@@ -1,0 +1,7 @@
+{
+  "name": "Giftwell gift message",
+  "isGift": "This order is a gift",
+  "messageLabel": "Gift message (printed on the packing slip)",
+  "charactersLeft": "{{count}} characters left",
+  "saveError": "We couldn't save your message. Please try again."
+}
