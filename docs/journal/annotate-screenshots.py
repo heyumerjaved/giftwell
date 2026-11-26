@@ -61,6 +61,10 @@ SHOTS = {
         ((300, 562, 1042, 628), "Cash on delivery limit. Orders above it can only pay by card.", "l"),
         ((1088, 78, 1390, 446), "Answers from the thank-you page survey.", "l"),
     ]),
+    "giftwell-live-survey-results": ("26-boomer-gifts-live-survey-results.jpg", (226, 66, 1004, 646), [
+        ((246, 92, 982, 518), "Live store, Shopify Basic plan: answers by source, last 30 days and all time, sorted by count.", "tr"),
+        ((246, 556, 982, 626), "What buyers typed under Other. This first one is my own test order.", "tr"),
+    ]),
 }
 
 
