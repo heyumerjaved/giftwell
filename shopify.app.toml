@@ -8,7 +8,8 @@ name = "Giftwell"
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
 # write_discounts: create the automatic discount that runs the tiered-discount Function
-scopes = "write_discounts"
+# write_orders: required to define the order metafield that stores the gift message
+scopes = "write_discounts,write_orders"
 
 # Gift message: the checkout extension writes the cart metafield $app.gift_message,
 # and this definition copies it onto the order and shows it to the merchant.
@@ -23,14 +24,10 @@ capabilities.cart_to_order_copyable = true
 
 [webhooks]
 api_version = "2027-01"
-
-  [[webhooks.subscriptions]]
-  uri = "/webhooks/app/uninstalled"
-  topics = [ "app/uninstalled" ]
-
-  [[webhooks.subscriptions]]
-  uri = "/webhooks/app/scopes_update"
-  topics = [ "app/scopes_update" ]
+# The template's app/uninstalled and app/scopes_update subscriptions are removed while
+# developing with `shopify app dev --use-localhost`: Shopify can't deliver webhooks to
+# localhost and rejects the config. Their route handlers stay in app/routes/ and get
+# re-subscribed here before deploying to a public URL.
 
 [auth]
 redirect_urls = [ "https://example.com/api/auth" ]

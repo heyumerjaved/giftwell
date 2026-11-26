@@ -62,7 +62,7 @@ What the template gives: an embedded admin app (React Router + Polaris), OAuth a
 
 ---
 
-## Phase 2: Gift message + tiered discount (26 Nov 2026, in progress)
+## Phase 2: Gift message + tiered discount (26 Nov 2026)
 
 ### Tiered discount (Shopify Function, Discount API)
 Scaffolded with Shopify CLI (`shopify app generate extension --template discount --flavor vanilla-js`), then trimmed to the one target it needs: `cart.lines.discounts.generate.run`. The scaffold also adds a shipping-discount target, which I removed.
@@ -97,8 +97,28 @@ Replaced the template's demo page with a Giftwell home: it shows the tiers and w
 | `--flavor preact` / `typescript-react` rejected for checkout UI | The checkout template has a single Preact flavor in this CLI version; generating without `--flavor` works. |
 | `applyAttributeChange` is deprecated | Switched to cart metafields plus a cart-to-order copyable order metafield definition. |
 | Dev preview refused the Function: "Variable definitions are missing" | Input-query variables must be backed by metafields. The excluded tag is fixed, so it is now written inline in the query. |
-| Cloudflare quick tunnel kept failing on repeated `shopify app dev` runs | Network-side; the first install run is done from an interactive terminal. |
+| Cloudflare quick tunnel kept failing on repeated `shopify app dev` runs ("max tries reached") | Switched to `shopify app dev --use-localhost`, which uses a local certificate made with mkcert. |
+| On localhost, the config was rejected: webhook URIs can't be `localhost`, and the order metafield needs `write_orders` | Paused the two template webhooks while developing on localhost (re-added before deploying), and added the `write_orders` scope. |
+| The gift message didn't show on the first checkout I opened | Checkout UI extensions in development only render on a checkout opened with the `?dev=` preview parameter from the Dev Console, and the preview takes a moment to pick up a new extension. |
+
+### Seen working on the dev store
+The discount was activated through the app's Admin API connection (the same `discountAutomaticAppCreate` call as the home page button) and tested on a real checkout.
+
+![Giftwell home: tiers and the active discount](screenshots/03-app-home-discount-active.jpg)
+
+2 units: the Function applies "Buy 2+, save 10%" automatically, with no code entered ($49.90 to $44.92).
+
+![Checkout with the 10% tier applied](screenshots/04-checkout-tier-10-percent.jpg)
+
+3 units: the 15% tier takes over ($74.85 to $63.63).
+
+![Checkout with the 15% tier applied](screenshots/06-checkout-tier-15-percent.png)
+
+The gift message after the delivery address, with the live character count, on the same checkout as the discount:
+
+![Gift message box and tiered discount in checkout](screenshots/05-checkout-gift-message-and-discount.jpg)
+
+The dev log shows the Function's cost on a real checkout: **0.36 million instructions** per run, comfortably inside Shopify's Function limit.
 
 ### Still to do in phase 2
-- Install the app on the dev store (first interactive `shopify app dev`), activate the discount and place a test order with a gift message.
-- Screenshots: the gift message in checkout, the discount line in the order summary, and the message on the order page.
+- Place a test order and screenshot the gift message on the order page in the admin.
