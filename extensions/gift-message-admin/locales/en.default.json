@@ -1,0 +1,9 @@
+{
+  "name": "Giftwell gift message",
+  "heading": "Gift details",
+  "isGift": "Gift order",
+  "giftWrap": "Gift wrap × {{count}}",
+  "notGift": "This order isn't marked as a gift.",
+  "noMessage": "No gift message was added.",
+  "error": "Couldn't load the gift details for this order."
+}

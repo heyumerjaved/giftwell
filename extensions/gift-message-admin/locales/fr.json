@@ -1,0 +1,9 @@
+{
+  "name": "Message cadeau Giftwell",
+  "heading": "Détails du cadeau",
+  "isGift": "Commande cadeau",
+  "giftWrap": "Emballage cadeau × {{count}}",
+  "notGift": "Cette commande n'est pas marquée comme cadeau.",
+  "noMessage": "Aucun message cadeau n'a été ajouté.",
+  "error": "Impossible de charger les détails du cadeau pour cette commande."
+}
