@@ -5,5 +5,7 @@
   "isGift": "Yes, this order is a gift",
   "messageLabel": "Your gift message",
   "charactersLeft": "{{count}} characters left",
-  "saveError": "We couldn't save your message. Please try again."
+  "saveError": "We couldn't save your message. Please try again.",
+  "saved": "Gift message saved",
+  "savesAutomatically": "Saves when you click away"
 }

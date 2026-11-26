@@ -83,9 +83,9 @@ Tested with 5 fixture carts run against the compiled WebAssembly through Shopify
 | discount without the product class | no discount |
 
 ### Gift message (Checkout UI extension)
-A card right after the delivery address: a gift icon, "Sending this as a gift?" and a short subtitle, then a "Yes, this order is a gift" checkbox. Ticking it turns the card a soft grey and opens a message box limited to 250 characters, with a live count that turns amber when 20 characters are left.
+A card right after the delivery address: a gift icon, "Sending this as a gift?" and a short subtitle, then a "Yes, this order is a gift" checkbox. Ticking it turns the card a soft grey and opens a message box limited to 250 characters. Below the box, a green check confirms "Gift message saved", and a live count turns amber when 20 characters are left. The gift icon is blue (info) and turns green once the box is ticked.
 
-Checkout extensions can't use custom CSS: Shopify keeps checkout consistent with each store's branding. So the styling is done entirely with Polaris components (`s-box` border, radius and background, `s-icon`, `s-text` types and tones). The first version was a plain checkbox; I restyled it into the card after a review. Labels are translated (English and French).
+Checkout extensions can't use custom CSS: Shopify keeps checkout consistent with each store's branding. So the styling is done entirely with Polaris components (`s-box` border, radius and background, `s-icon`, `s-text` types and tones). Colour works the same way: components take tones such as info, success and warning, and the actual colours come from each store's checkout branding, so the card always matches the store. The first version was a plain checkbox; I restyled it into the card after a review. Labels are translated (English and French).
 
 **Where the message is stored:** Shopify now marks cart attributes (`applyAttributeChange`) as deprecated and recommends cart metafields. So the extension writes the cart metafield `$app.gift_message`, and an order metafield definition in `shopify.app.toml` with `cart_to_order_copyable = true` copies it onto the order when it is placed. The merchant sees it on the order page as "Gift message".
 
@@ -102,6 +102,7 @@ Replaced the template's demo page with a Giftwell home: it shows the tiers and w
 | Cloudflare quick tunnel kept failing on repeated `shopify app dev` runs ("max tries reached") | Switched to `shopify app dev --use-localhost`, which uses a local certificate made with mkcert. |
 | On localhost, the config was rejected: webhook URIs can't be `localhost`, and the order metafield needs `write_orders` | Paused the two template webhooks while developing on localhost (re-added before deploying), and added the `write_orders` scope. |
 | The checkbox appeared twice in the dev preview | I had given the extension two placements: a fixed one after the delivery address and a movable block. Dev preview shows both, and a merchant who placed the block would also get two. Removed the block, keeping the single fixed spot next to the shipping details. |
+| After a page reload, the card came back unticked and empty, although the message was saved | App-owned metafields are only read back when the extension requests them. Added `[[extensions.metafields]]` for `$app.gift_message` to the extension config; a reload now restores the message and the "saved" check. |
 | The gift message didn't show on the first checkout I opened | Checkout UI extensions in development only render on a checkout opened with the `?dev=` preview parameter from the Dev Console, and the preview takes a moment to pick up a new extension. |
 
 ### Seen working on the dev store

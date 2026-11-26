@@ -15,5 +15,10 @@ uid = "9b0b5f20-aee3-259f-4173-a6bdded8fdfb6c4f55d2"
 module = "./src/Checkout.jsx"
 target = "purchase.checkout.delivery-address.render-after"
 
+# Read the saved message back, so it survives a page reload.
+[[extensions.metafields]]
+namespace = "$app"
+key = "gift_message"
+
 [extensions.capabilities]
 api_access = false

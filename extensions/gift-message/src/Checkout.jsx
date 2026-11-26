@@ -29,6 +29,7 @@ function GiftMessage() {
   const [isGift, setIsGift] = useState(saved !== "");
   const [message, setMessage] = useState(saved);
   const [error, setError] = useState("");
+  const [savedMessage, setSavedMessage] = useState(saved);
 
   // Some checkouts (for example accelerated wallets) can't take cart metafields.
   if (!instructions.value.metafields.canSetCartMetafields) {
@@ -50,7 +51,12 @@ function GiftMessage() {
           }
         : { type: "removeCartMetafield", namespace: NAMESPACE, key: KEY },
     );
-    setError(result.type === "error" ? i18n.translate("saveError") : "");
+    if (result.type === "error") {
+      setError(i18n.translate("saveError"));
+    } else {
+      setError("");
+      setSavedMessage(trimmed);
+    }
   }
 
   async function onToggle(event) {
@@ -63,6 +69,8 @@ function GiftMessage() {
   }
 
   const charactersLeft = MAX_LENGTH - message.length;
+  const isSaved =
+    isGift && savedMessage !== "" && savedMessage === message.trim();
 
   return (
     <s-box
@@ -73,7 +81,11 @@ function GiftMessage() {
     >
       <s-stack gap="base">
         <s-stack direction="inline" gap="base" alignItems="center">
-          <s-icon type="gift-card" size="large" />
+          <s-icon
+            type="gift-card"
+            size="large"
+            tone={isGift ? "success" : "info"}
+          />
           <s-stack gap="none">
             <s-text type="strong">{i18n.translate("heading")}</s-text>
             <s-text color="subdued">{i18n.translate("subheading")}</s-text>
@@ -97,13 +109,27 @@ function GiftMessage() {
               onInput={(event) => setMessage(valueOf(event))}
               onChange={(event) => save(valueOf(event))}
             />
-            <s-text
-              type="small"
-              color="subdued"
-              tone={charactersLeft <= 20 ? "warning" : "auto"}
-            >
-              {i18n.translate("charactersLeft", { count: charactersLeft })}
-            </s-text>
+            <s-stack direction="inline" gap="base" justifyContent="space-between">
+              {isSaved ? (
+                <s-stack direction="inline" gap="small-200" alignItems="center">
+                  <s-icon type="check-circle-filled" size="small" tone="success" />
+                  <s-text type="small" tone="success">
+                    {i18n.translate("saved")}
+                  </s-text>
+                </s-stack>
+              ) : (
+                <s-text type="small" color="subdued">
+                  {i18n.translate("savesAutomatically")}
+                </s-text>
+              )}
+              <s-text
+                type="small"
+                color="subdued"
+                tone={charactersLeft <= 20 ? "warning" : "auto"}
+              >
+                {i18n.translate("charactersLeft", { count: charactersLeft })}
+              </s-text>
+            </s-stack>
           </s-stack>
         )}
       </s-stack>

@@ -5,5 +5,7 @@
   "isGift": "Oui, cette commande est un cadeau",
   "messageLabel": "Votre message cadeau",
   "charactersLeft": "{{count}} caractères restants",
-  "saveError": "Impossible d'enregistrer votre message. Veuillez réessayer."
+  "saveError": "Impossible d'enregistrer votre message. Veuillez réessayer.",
+  "saved": "Message cadeau enregistré",
+  "savesAutomatically": "Enregistré dès que vous cliquez ailleurs"
 }
