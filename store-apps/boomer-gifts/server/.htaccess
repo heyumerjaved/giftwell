@@ -9,7 +9,7 @@ RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 SetEnvIf Authorization "(.+)" HTTP_AUTHORIZATION=$1
 
 # Never serve secrets, helpers, SQL or docs.
-<FilesMatch "^(config\.php|config\.sample\.php|lib\.php|schema\.sql|.*\.md)$">
+<FilesMatch "^(config\.php|config\.sample\.php|lib\.php|schema\.sql|error_log|.*\.md)$">
   Require all denied
 </FilesMatch>
 
