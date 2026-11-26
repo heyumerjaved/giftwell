@@ -1,0 +1,4 @@
+{
+  "name": "Giftwell max per product (Rust)",
+  "description": "Rust port of the max-per-product validation, used to compare performance with the JavaScript version."
+}

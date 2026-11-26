@@ -74,7 +74,19 @@ cd extensions/max-per-product && npx vitest run   # 5 tests
 
 # Settings validation unit tests
 npx vitest run app/lib                            # 7 tests
+
+# Rust port of max-per-product (needs Rust + the wasm32-unknown-unknown target)
+cd extensions/max-per-product-rust && npx vitest run   # the same 5 tests
 ```
+
+### JavaScript vs Rust
+
+`extensions/max-per-product-rust` is a Rust port of the max-per-product Function with identical output, kept to compare the two languages. Instruction counts from `shopify app function run` (Shopify's limit is 11 million for carts up to 200 lines):
+
+| Cart | JavaScript | Rust |
+|---|---|---|
+| 3 lines, 1 product over the limit | 312,506 | 42,961 (~7.3x fewer) |
+| 200 lines, 40 products over the limit | 6,993,307 | 3,382,036 (~2.1x fewer) |
 
 The Function fixtures also check each sample cart against Shopify's schema. On a live checkout the discount Function runs in about 0.36 million instructions.
 
@@ -90,6 +102,7 @@ extensions/
   tiered-discount/           Function: Discount API
   hide-cod/                  Function: Payment Customization API
   max-per-product/           Function: Cart and Checkout Validation API
+  max-per-product-rust/      The same Function in Rust, for a speed comparison
   gift-message/              Checkout UI extension
   gift-wrap-upsell/          Checkout UI extension
   thank-you-survey/          Checkout UI extension (thank-you page)

@@ -333,4 +333,18 @@ Phase 5 is complete.
 - **README** rewritten for clients and developers: feature table, screenshots, an architecture diagram, how settings and data flow, tests, project structure and setup steps.
 - **Case study** added to umerconnects.com (`/work/giftwell-shopify-checkout-extensibility`), built with the site's own generator and linked from the Custom apps and integrations service page.
 - **CV entry** written up with verified facts and ready-to-use bullets.
-- Still to do: a Rust version of one Function with a speed comparison, and a fresh order screenshot with a real gift message.
+- Still to do: a fresh order screenshot with a real gift message.
+
+### Rust version of max per product, and a speed comparison
+Shopify recommends Rust for Functions with heavy logic, so I ported the max-per-product validation to Rust (`extensions/max-per-product-rust`) with identical behaviour and messages. It compiled on the first build and passes the same 5 fixture tests as the JavaScript version, output for output. It isn't activated on the store; it exists to compare the two languages.
+
+Both were run on the same carts with `shopify app function run`, which reports the instruction count Shopify bills against its limit (11 million instructions for carts up to 200 lines):
+
+| Cart | JavaScript | Rust | Difference |
+|---|---|---|---|
+| Test cart: 3 lines, 1 product over the limit | 312,506 | 42,961 | ~7.3x fewer |
+| Stress cart: 200 lines, 40 products over the limit | 6,993,307 (64% of the limit) | 3,382,036 (31% of the limit) | ~2.1x fewer |
+
+**What it means:** for small carts the JavaScript runtime's start-up cost dominates, so Rust wins by a wide margin. On a 200-line cart both stay inside the limit, but Rust leaves about twice the headroom. For a Function like this one, JavaScript is fine and easier to maintain. For heavy logic on big carts, Rust is the safer choice.
+
+**Problem met:** Rust's download server (static.rust-lang.org) reset every connection from this network, in my terminal and in a normal one. Installing from a different network worked.
