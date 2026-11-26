@@ -325,3 +325,12 @@ And checkout uses it at once: 5 snowboards get "Buy 5+, save 20%", $3,149.75 dow
 | The 5-unit test cart came out as 4 units at 15% | Not a Giftwell bug: the test orders had used up that ski wax variant's stock, so Shopify trimmed the cart. Retested with a product that has 100 in stock. |
 
 Phase 5 is complete.
+
+---
+
+## Phase 6: Showcase (26 Nov 2026, in progress)
+
+- **README** rewritten for clients and developers: feature table, screenshots, an architecture diagram, how settings and data flow, tests, project structure and setup steps.
+- **Case study** added to umerconnects.com (`/work/giftwell-shopify-checkout-extensibility`), built with the site's own generator and linked from the Custom apps and integrations service page.
+- **CV entry** written up with verified facts and ready-to-use bullets.
+- Still to do: a Rust version of one Function with a speed comparison, and a fresh order screenshot with a real gift message.
