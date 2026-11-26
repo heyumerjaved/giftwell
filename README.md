@@ -2,7 +2,7 @@
 
 A Shopify app that turns a standard checkout into a gifting checkout, built with **Checkout UI extensions** and **Shopify Functions**.
 
-> Status: in progress. Phases 1 to 4 are done: every feature below except the settings page is built and verified on the dev store. Follow the build in the [build journal](docs/journal/BUILD-JOURNAL.md).
+> Status: in progress. Phases 1 to 5 are done: every feature below is built and verified on the dev store. Phase 6 (the showcase write-up) is next. Follow the build in the [build journal](docs/journal/BUILD-JOURNAL.md).
 
 ## What it does
 
@@ -15,7 +15,7 @@ A Shopify app that turns a standard checkout into a gifting checkout, built with
 | Max 5 of any product per order | Function: Cart and Checkout Validation | Done |
 | "How did you hear about us?" on the thank-you page | Checkout UI extension + app API | Done |
 | Gift message shown right on the admin order page | Admin UI extension (order details block) | Done |
-| Admin settings page, read by every Function through metafields | Embedded app (React Router + Polaris) | Planned |
+| Admin settings page, read by every Function through metafields | Embedded app (React Router + Polaris) | Done |
 
 ## Stack
 

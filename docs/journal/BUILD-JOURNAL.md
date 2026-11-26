@@ -282,3 +282,46 @@ On order #1003, with gift wrap, both badges show (this test order's message is p
 | Admin block showed "Couldn't load the gift details" | Expected until protected customer data access was granted in the Dev Dashboard. |
 
 Phase 4 is complete.
+
+---
+
+## Phase 5: Settings page (26 Nov 2026)
+
+The app's home page is now where a merchant runs Giftwell: status at the top, three settings sections, and the survey results beside them.
+
+![Giftwell settings page in the Shopify admin](screenshots/22-settings-page.jpg)
+
+### What a merchant can change
+| Section | Settings | Stored in |
+|---|---|---|
+| Buy more, save more | up to 3 tiers: minimum products and % off (empty rows are skipped) | the discount's `$app.function-configuration` metafield |
+| Cash on delivery | the order total above which COD is hidden, and which payment method names count as COD | the payment customization's metafield |
+| Limit per product | the most units of one product per order | the validation's metafield |
+
+Each Function already reads its metafield on every run, so a save changes checkout immediately: no deploy, no code.
+
+### How it's built
+- **`app/lib/settings.ts`**: pure parsing and validation of the form (whole numbers, 1–100%, a tier quantity of at least 2, no duplicate tiers, a COD limit of 0 or more, rounded to cents). Covered by **7 unit tests** (`app/lib/settings.test.ts`).
+- **`app/lib/giftwell.server.ts`**: one Admin API query reads all three Functions' owners and metafields, finding Giftwell's own by title. Saving updates the existing metafields in one `metafieldsSet` call, renames the payment customization and validation so their titles in the admin match the numbers, and creates anything missing. On a fresh install, a single Save sets everything up.
+- **The page** uses Shopify's App Bridge save bar (`data-save-bar` on the form): the standard "Unsaved changes, Discard / Save" bar appears as soon as a field changes, with a discard confirmation. Field errors from the server show inline under the field that caused them.
+- **Survey results**: the answers are grouped with Prisma and drawn as bars in the brand maroon, with the latest "Other" replies listed under them.
+
+### Seen working on the dev store
+Adding a third tier (5 products, 20% off) brought up the save bar:
+
+![Save bar after adding a third tier](screenshots/23-settings-save-bar.jpg)
+
+After saving, the page confirms and reloads the stored values from Shopify:
+
+![Settings saved toast](screenshots/24-settings-saved.jpg)
+
+And checkout uses it at once: 5 snowboards get "Buy 5+, save 20%", $3,149.75 down to $2,519.80.
+
+![Checkout applying the new 20% tier](screenshots/25-checkout-new-tier-20-percent.png)
+
+### Problem met
+| Problem | Fix |
+|---|---|
+| The 5-unit test cart came out as 4 units at 15% | Not a Giftwell bug: the test orders had used up that ski wax variant's stock, so Shopify trimmed the cart. Retested with a product that has 100 in stock. |
+
+Phase 5 is complete.
