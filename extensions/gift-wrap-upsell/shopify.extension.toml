@@ -1,0 +1,25 @@
+# Giftwell gift wrap upsell: offers a gift wrap add-on under the cart lines.
+api_version = "2026-10"
+
+[[extensions]]
+name = "t:name"
+handle = "gift-wrap-upsell"
+type = "ui_extension"
+uid = "4efcc8f3-ad8a-4611-8b8f-cd0692fb601e1c446423"
+
+[[extensions.targeting]]
+module = "./src/Checkout.jsx"
+target = "purchase.checkout.cart-line-list.render-after"
+
+[extensions.capabilities]
+# Needed to look up the gift wrap product and price through the Storefront API.
+api_access = true
+
+# The merchant picks the gift wrap variant in the checkout editor. Without it,
+# the extension falls back to the product with the handle "giftwell-gift-wrap".
+[extensions.settings]
+[[extensions.settings.fields]]
+key = "gift_wrap_variant"
+type = "variant_reference"
+name = "Gift wrap product"
+description = "The product variant added when a buyer chooses gift wrap."

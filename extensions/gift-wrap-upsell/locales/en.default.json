@@ -1,0 +1,10 @@
+{
+  "name": "Giftwell gift wrap upsell",
+  "heading": "Add gift wrap",
+  "description": "Hand-wrapped with a satin ribbon, ready to give.",
+  "add": "Add gift wrap for {{price}}",
+  "added": "Gift wrap added",
+  "remove": "Remove",
+  "addError": "We couldn't add gift wrap. Please try again.",
+  "removeError": "We couldn't remove gift wrap. Please try again."
+}

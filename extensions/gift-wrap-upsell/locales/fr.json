@@ -1,0 +1,10 @@
+{
+  "name": "Emballage cadeau Giftwell",
+  "heading": "Ajouter un emballage cadeau",
+  "description": "Emballé à la main avec un ruban satiné, prêt à offrir.",
+  "add": "Ajouter l'emballage cadeau pour {{price}}",
+  "added": "Emballage cadeau ajouté",
+  "remove": "Retirer",
+  "addError": "Impossible d'ajouter l'emballage cadeau. Veuillez réessayer.",
+  "removeError": "Impossible de retirer l'emballage cadeau. Veuillez réessayer."
+}
