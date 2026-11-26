@@ -1,0 +1,19 @@
+# Boomer Gifts thank-you survey: asks "How did you hear about us?" after purchase and
+# sends the answer to the PHP server in ../../server/survey.php (hosted at umerconnects.com/boomer-survey/).
+api_version = "2026-10"
+
+[[extensions]]
+name = "Thank-you survey"
+handle = "thank-you-survey"
+type = "ui_extension"
+uid = "8aa63b2a-b00d-45e0-92b8-b1424b8d02b8"
+
+[[extensions.targeting]]
+module = "./src/Checkout.jsx"
+target = "purchase.thank-you.block.render"
+
+[extensions.capabilities]
+api_access = false
+# Sends the answer to the app server. Approved in the Dev Dashboard
+# (Settings → Access requests → Network access).
+network_access = true

@@ -1,0 +1,19 @@
+{
+  "name": "Boomer Gifts thank-you survey",
+  "heading": "One quick question",
+  "subheading": "It helps a small shop like ours know what's working.",
+  "question": "How did you hear about us?",
+  "answers": {
+    "google": "Google search",
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "pinterest": "Pinterest",
+    "ai": "ChatGPT or another AI assistant",
+    "friend": "A friend or family member",
+    "other": "Other"
+  },
+  "otherLabel": "Tell us where",
+  "send": "Send",
+  "thanks": "Thanks for telling us!",
+  "error": "We couldn't send your answer. Please try again."
+}

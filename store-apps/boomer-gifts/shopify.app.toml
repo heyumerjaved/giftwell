@@ -1,0 +1,21 @@
+# Boomer Gifts survey app: the Giftwell thank-you survey, adapted for a Basic plan store.
+# The server is two PHP files in ./server, hosted at umerconnects.com/boomer-survey/ with SQLite.
+# App created in the Dev Dashboard (Umer J. organization) on 27 Nov 2026.
+
+client_id = "55925d15548e8301ac9cfc3f63a38edc"
+name = "Boomer Gifts Survey"
+application_url = "https://umerconnects.com/boomer-survey/"
+embedded = true
+
+[access_scopes]
+# The survey reads nothing from the store: the session token identifies the shop.
+scopes = ""
+
+[auth]
+redirect_urls = [ "https://umerconnects.com/boomer-survey/" ]
+
+[build]
+automatically_update_urls_on_dev = false
+
+[webhooks]
+api_version = "2026-10"

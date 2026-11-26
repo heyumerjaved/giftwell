@@ -1,0 +1,19 @@
+{
+  "name": "Questionnaire de remerciement Boomer Gifts",
+  "heading": "Une petite question",
+  "subheading": "Cela aide une petite boutique comme la nôtre à savoir ce qui fonctionne.",
+  "question": "Comment avez-vous entendu parler de nous ?",
+  "answers": {
+    "google": "Recherche Google",
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "pinterest": "Pinterest",
+    "ai": "ChatGPT ou un autre assistant IA",
+    "friend": "Un ami ou un proche",
+    "other": "Autre"
+  },
+  "otherLabel": "Dites-nous où",
+  "send": "Envoyer",
+  "thanks": "Merci de nous l'avoir dit !",
+  "error": "Impossible d'envoyer votre réponse. Veuillez réessayer."
+}

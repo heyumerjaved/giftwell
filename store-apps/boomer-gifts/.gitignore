@@ -1,0 +1,7 @@
+node_modules
+.shopify/*
+.shopify.lock
+/extensions/*/dist
+# Secrets: lives only on the server
+/server/config.php
+/dist

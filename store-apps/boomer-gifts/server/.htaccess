@@ -1,0 +1,16 @@
+# This folder has its own rewrite rules, so the parent site's rules (which block
+# all .php files) don't apply here. Only the two entry points below are reachable.
+DirectoryIndex index.php
+
+# Pass the Authorization header (the checkout session token) through to PHP.
+RewriteEngine On
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+SetEnvIf Authorization "(.+)" HTTP_AUTHORIZATION=$1
+
+# Never serve secrets, helpers, SQL or docs.
+<FilesMatch "^(config\.php|config\.sample\.php|lib\.php|schema\.sql|.*\.md)$">
+  Require all denied
+</FilesMatch>
+
+Options -Indexes
